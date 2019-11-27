@@ -1,48 +1,39 @@
 <template>
   <v-app>
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="form" v-model="valid">
       <v-container>
         <v-row>
           <v-col>
-            <h1 class="purple--text">Sign up with us</h1>
+            <h1 class="purple--text">Profile</h1>
           </v-col>
         </v-row>
         <v-row>
           <v-col cols="12">
             <v-text-field
               v-model="firstname"
-              :rules="nameRules"
               placeholder="First name"
               :single-line="singleLine"
               solo
               clearable
-              required
+              :disabled="edit"
             ></v-text-field>
             <v-text-field
               v-model="lastname"
-              :rules="nameRules"
               placeholder="Last name"
               :single-line="singleLine"
               solo
               clearable
-              required
+              :disabled="edit"
             ></v-text-field>
             <v-text-field
+              background-color="deep-purple lighten-5"
               v-model="email"
-              :rules="emailRules"
-              placeholder="E-mail"
               :single-line="singleLine"
               solo
-              clearable
-              required
+              disabled
             ></v-text-field>
-            <v-card v-if="email.length > 0" class="mb-4 mt-0">
-              <v-card-title>You are signing up with</v-card-title>
-              <v-card-subtitle>{{email}}</v-card-subtitle>
-            </v-card>
             <v-text-field
               :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[rules.required, rules.min]"
               :type="show ? 'text' : 'password'"
               name="input-10-2"
               placeholder="Password"
@@ -52,10 +43,23 @@
               solo
               clearable
               v-model="password"
+              :disabled="edit"
             ></v-text-field>
             <v-text-field
               :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-              :rules="[rules.required, rules.min]"
+              :type="show ? 'text' : 'password'"
+              name="input-10-2"
+              placeholder="New password"
+              hint="At least 8 characters"
+              class="input-group--focused"
+              @click:append="show = !show"
+              solo
+              clearable
+              v-model="newpassword"
+              :disabled="edit"
+            ></v-text-field>
+            <v-text-field
+              :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
               :type="show ? 'text' : 'password'"
               name="input-10-2"
               placeholder="Confirm Password"
@@ -65,8 +69,11 @@
               solo
               clearable
               v-model="passwordConfirm"
+              :disabled="edit"
             ></v-text-field>
-            <v-btn @click="validate" block color="deep-purple darken-3" dark>Sign Up</v-btn>
+            <v-btn v-if="edit" @click="edit = !edit" block color="deep-purple darken-3" dark>Edit</v-btn>
+            <v-btn v-if="!edit" @click="edit = !edit" block color="deep-purple accent-1" dark>Save</v-btn>
+            <v-btn class="mt-3" v-if="!edit" @click="edit = !edit" block color="error" dark>Cancel</v-btn>
           </v-col>
         </v-row>
       </v-container>
@@ -76,7 +83,7 @@
 
 <script>
 export default {
-  name: "signup",
+  name: "profile",
   data() {
     return {
       firstname: "",
@@ -84,19 +91,15 @@ export default {
       email: "",
       password: "",
       passwordConfirm: "",
+      newpassword: "",
       valid: true,
-      nameRules: [v => !!v || "Name is required"],
-      emailRules: [
-        v => !!v || "E-mail is required",
-        v => /.+@.+\..+/.test(v) || "E-mail must be valid"
-      ],
       rules: {
-        required: value => !!value || "Required.",
-        min: v => v.length >= 8 || "Min 8 characters",
+        min: v => (v && v.length) >= 8 || "Min 8 characters",
         emailMatch: () => "The email and password you entered don't match"
       },
       show: false,
-      singleLine: true
+      singleLine: true,
+      edit: true
     };
   },
   methods: {
@@ -111,6 +114,11 @@ export default {
     resetValidation() {
       this.$refs.form.resetValidation();
     }
+  },
+  beforeMount() {
+    this.firstname = "Mario";
+    this.lastname = "Martinez";
+    this.email = "mario@example.com";
   }
 };
 </script>

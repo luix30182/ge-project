@@ -18,7 +18,7 @@ export default {
   },
   data() {
     return {
-      test: false
+      test: true
     };
   }
 };
