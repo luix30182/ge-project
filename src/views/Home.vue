@@ -1,16 +1,10 @@
 <template>
   <v-app>
-    <NavBar />
+    <v-container>
+      <v-row justify="center">
+        <h1 class="purple--text">Welcome</h1>
+      </v-row>
+    </v-container>
   </v-app>
 </template>
 
-<script>
-// @ is an alias to /src
-import NavBar from "@/components/navBar/NavBar";
-export default {
-  name: "home",
-  components: {
-    NavBar
-  }
-};
-</script>
