@@ -33,6 +33,7 @@
               placeholder="E-mail"
               :single-line="singleLine"
               solo
+              type="email"
               clearable
               required
             ></v-text-field>
@@ -119,7 +120,10 @@ export default {
         if (this.password === this.passwordConfirm) {
           firebase
             .auth()
-            .createUserWithEmailAndPassword(this.email, this.password)
+            .createUserWithEmailAndPassword(
+              this.email.trim().toLowerCase(),
+              this.password.trim().toLowerCase()
+            )
             .then(user => {
               db.collection("geusers")
                 .doc(user.user.uid)

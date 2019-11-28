@@ -15,6 +15,7 @@
               placeholder="E-mail"
               :single-line="true"
               solo
+              type="email"
               :clear-icon-cb="clearSearchA"
               required
             ></v-text-field>
@@ -83,7 +84,10 @@ export default {
       if (this.$refs.form.validate()) {
         firebase
           .auth()
-          .signInWithEmailAndPassword(this.email, this.password)
+          .signInWithEmailAndPassword(
+            this.email.trim().toLowerCase(),
+            this.password.trim().toLowerCase()
+          )
           .then(user => {
             db.collection("geusers")
               .doc(user.user.uid)
