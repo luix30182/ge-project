@@ -71,9 +71,34 @@
               v-model="passwordConfirm"
               :disabled="edit"
             ></v-text-field>
-            <v-btn v-if="edit" @click="edit = !edit" block color="deep-purple darken-3" dark>Edit</v-btn>
-            <v-btn v-if="!edit" @click="edit = !edit" block color="deep-purple accent-1" dark>Save</v-btn>
-            <v-btn class="mt-3" v-if="!edit" @click="edit = !edit" block color="error" dark>Cancel</v-btn>
+            <v-btn
+              v-if="edit"
+              @click="edit = !edit"
+              block
+              color="deep-purple darken-3"
+              dark
+              >Edit</v-btn
+            >
+            <v-btn
+              v-if="!edit"
+              @click="edit = !edit"
+              block
+              color="deep-purple accent-1"
+              dark
+              >Save</v-btn
+            >
+            <v-btn
+              class="mt-3"
+              v-if="!edit"
+              @click="edit = !edit"
+              block
+              color="error"
+              dark
+              >Cancel</v-btn
+            >
+            <v-btn class="my-4" @click="logout = !edit" block color="error" dark
+              >Logout</v-btn
+            >
           </v-col>
         </v-row>
       </v-container>
@@ -82,6 +107,9 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
+import "firebase/auth";
+
 export default {
   name: "profile",
   data() {
@@ -113,12 +141,31 @@ export default {
     },
     resetValidation() {
       this.$refs.form.resetValidation();
+    },
+    logout() {
+      firebase
+        .auth()
+        .signOut()
+        .then(() => {
+          this.$router.push({
+            name: "home"
+          });
+        })
+        .catch(e => {
+          console.log(e);
+        });
     }
   },
   beforeMount() {
-    this.firstname = "Mario";
-    this.lastname = "Martinez";
-    this.email = "mario@example.com";
+    if (this.$store.getters.user !== null) {
+      this.firstname = this.$store.getters.user.firstName;
+      this.lastname = this.$store.getters.user.lastName;
+      this.email = this.$store.getters.user.email;
+    } else {
+      this.$router.push({
+        name: "home"
+      });
+    }
   }
 };
 </script>

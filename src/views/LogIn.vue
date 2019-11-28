@@ -94,11 +94,15 @@ export default {
                   this.text = "Error the user doesn't exist";
                   this.snackbar = true;
                 } else {
-                  this.user = doc;
-                  this.$store.commit("change", doc);
+                  this.user = {
+                    firstName: doc.data().firstName,
+                    lastName: doc.data().lastName,
+                    email: doc.data().email,
+                    uid: user.user.uid
+                  };
+                  this.$store.commit("change", this.user);
                   this.$router.push({
-                    name: "dashboard",
-                    params: { user: doc.data() }
+                    name: "dashboard"
                   });
                 }
               })
