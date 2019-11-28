@@ -95,6 +95,7 @@ export default {
                   this.snackbar = true;
                 } else {
                   this.user = doc;
+                  this.$store.commit("change", doc);
                   this.$router.push({
                     name: "dashboard",
                     params: { user: doc.data() }

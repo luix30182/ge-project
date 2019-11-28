@@ -1,7 +1,7 @@
 <template>
   <div>
-    <SignedIn user="user" v-if="useri" />
-    <SignedOut v-if="useri == null" />
+    <SignedIn user="user" v-if="$store.getters.user" />
+    <SignedOut v-if="$store.getters.user == null" />
   </div>
 </template>
 
