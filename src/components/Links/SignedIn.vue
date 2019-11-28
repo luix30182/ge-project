@@ -17,6 +17,9 @@
 
 <script>
 export default {
-  name: "signedIn"
+  name: "signedIn",
+  props: {
+    user: null
+  }
 };
 </script>

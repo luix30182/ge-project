@@ -13,9 +13,9 @@
               v-model="email"
               :rules="emailRules"
               placeholder="E-mail"
-              single-line="true"
+              :single-line="true"
               solo
-              clearable
+              :clear-icon-cb="clearSearchA"
               required
             ></v-text-field>
             <v-text-field
@@ -32,9 +32,16 @@
               v-model="password"
             ></v-text-field>
 
-            <v-btn @click="validate" block color="deep-purple darken-3" dark>Log In</v-btn>
+            <v-btn @click="logIn" block color="deep-purple darken-3" dark
+              >Log In</v-btn
+            >
+            <v-snackbar v-model="snackbar" :timeout="2000">
+              {{ text }}
+              <v-btn color="pink" text @click="snackbar = false">
+                Close
+              </v-btn>
+            </v-snackbar>
           </v-col>
-          <v-col cols="12"></v-col>
         </v-row>
       </v-container>
     </v-form>
@@ -42,6 +49,10 @@
 </template>
 
 <script>
+import firebase from "firebase/app";
+import "firebase/auth";
+import db from "../firebaseInit";
+
 export default {
   name: "login",
   data() {
@@ -55,11 +66,56 @@ export default {
       ],
       rules: {
         required: value => !!value || "Required.",
-        min: v => v.length >= 8 || "Min 8 characters",
+        min: v => (v && v.length) >= 8 || "Min 8 characters",
         emailMatch: () => "The email and password you entered don't match"
       },
-      show: false
+      show: false,
+      text: "",
+      snackbar: false,
+      user: null
     };
+  },
+  methods: {
+    clearSearchA() {
+      this.email = "";
+    },
+    logIn: function() {
+      if (this.$refs.form.validate()) {
+        firebase
+          .auth()
+          .signInWithEmailAndPassword(this.email, this.password)
+          .then(user => {
+            db.collection("geusers")
+              .doc(user.user.uid)
+              .get()
+              .then(doc => {
+                if (!doc.exists) {
+                  this.$refs.form.reset();
+                  this.text = "Error the user doesn't exist";
+                  this.snackbar = true;
+                } else {
+                  this.user = doc;
+                  this.$router.push({
+                    name: "dashboard",
+                    params: { user: doc.data() }
+                  });
+                }
+              })
+              .catch(() => {
+                this.$refs.form.reset();
+                this.text = "Error getting your data";
+                this.snackbar = true;
+              });
+          })
+          .catch(() => {
+            this.text = "Error in login";
+            this.snackbar = true;
+          });
+      } else {
+        this.text = "Verify your data";
+        this.snackbar = true;
+      }
+    }
   }
 };
 </script>

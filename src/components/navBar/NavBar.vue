@@ -1,10 +1,9 @@
 <template>
   <div>
-    <SignedIn v-if="test" />
-    <SignedOut v-if="!test" />
+    <SignedIn user="user" v-if="useri" />
+    <SignedOut v-if="useri == null" />
   </div>
 </template>
-
 
 <script>
 import SignedIn from "../Links/SignedIn";
@@ -18,8 +17,13 @@ export default {
   },
   data() {
     return {
-      test: true
+      useri: this.user
     };
+  },
+  computed: {
+    user: function() {
+      return this.$route.params.user || null;
+    }
   }
 };
 </script>
