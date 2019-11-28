@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation fixed grow color="deep-purple accent-4">
+  <v-bottom-navigation grow color="deep-purple accent-4">
     <v-btn height="100%" to="/dashboard">
       <span>DashBoard</span>
       <v-icon>mdi-home</v-icon>
