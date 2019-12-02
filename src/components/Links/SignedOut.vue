@@ -1,15 +1,15 @@
 <template>
-  <v-bottom-navigation grow color="deep-purple accent-4">
+  <v-bottom-navigation fixed grow color="deep-purple accent-4">
     <v-btn height="100%" to="/">
-      <span>Home</span>
+      <span>Inicio</span>
       <v-icon>mdi-home</v-icon>
     </v-btn>
     <v-btn height="100%" to="/login">
-      <span>Log In</span>
+      <span>Ingresar</span>
       <v-icon>mdi-account</v-icon>
     </v-btn>
     <v-btn height="100%" to="/signup">
-      <span>Sign Up</span>
+      <span>Crear cuenta</span>
       <v-icon>mdi-account-plus</v-icon>
     </v-btn>
   </v-bottom-navigation>

@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <v-form ref="form" v-model="valid" lazy-validation>
-      <v-container>
+      <v-container class="mb-10">
         <v-row>
           <v-col>
-            <h1 class="purple--text">Sign up with us</h1>
+            <h1 class="purple--text">Registrate</h1>
           </v-col>
         </v-row>
         <v-row>
@@ -12,7 +12,7 @@
             <v-text-field
               v-model="firstname"
               :rules="nameRules"
-              placeholder="First name"
+              placeholder="Nombre(s)"
               :single-line="singleLine"
               solo
               clearable
@@ -21,7 +21,7 @@
             <v-text-field
               v-model="lastname"
               :rules="nameRules"
-              placeholder="Last name"
+              placeholder="Apellidos"
               :single-line="singleLine"
               solo
               clearable
@@ -30,23 +30,24 @@
             <v-text-field
               v-model="email"
               :rules="emailRules"
-              placeholder="E-mail"
+              placeholder="Correo electronico"
               :single-line="singleLine"
               solo
               type="email"
-              clearable
+              :clearable="true"
+              @click:clear="clearSearchA"
               required
             ></v-text-field>
-            <v-card v-if="email.length > 0" class="mb-4 mt-0">
-              <v-card-title>You are signing up with</v-card-title>
-              <v-card-subtitle>{{ email }}</v-card-subtitle>
+            <v-card v-if="emailC.length > 0" class="mb-4 mt-0">
+              <v-card-title>Te estas registrando con</v-card-title>
+              <v-card-subtitle>{{ emailC }}</v-card-subtitle>
             </v-card>
             <v-text-field
               :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
               :rules="[rules.required, rules.min]"
               :type="show ? 'text' : 'password'"
               name="input-10-2"
-              placeholder="Password"
+              placeholder="Contraseña"
               hint="At least 8 characters"
               class="input-group--focused"
               @click:append="show = !show"
@@ -59,7 +60,7 @@
               :rules="[rules.required, rules.min]"
               :type="show ? 'text' : 'password'"
               name="input-10-2"
-              placeholder="Confirm Password"
+              placeholder="Confirmar contraseña"
               hint="At least 8 characters"
               class="input-group--focused"
               @click:append="show = !show"
@@ -67,14 +68,10 @@
               clearable
               v-model="passwordConfirm"
             ></v-text-field>
-            <v-btn @click="signIn" block color="deep-purple darken-3" dark
-              >Sign Up</v-btn
-            >
+            <v-btn @click="signIn" block color="deep-purple darken-3" dark>Crear cuenta</v-btn>
             <v-snackbar v-model="snackbar" :timeout="2000">
               {{ text }}
-              <v-btn color="pink" text @click="snackbar = false">
-                Close
-              </v-btn>
+              <v-btn color="pink" text @click="snackbar = false">Cerrar</v-btn>
             </v-snackbar>
           </v-col>
         </v-row>
@@ -115,6 +112,9 @@ export default {
     };
   },
   methods: {
+    clearSearchA() {
+      this.email = "";
+    },
     signIn: function() {
       if (this.$refs.form.validate()) {
         if (this.password === this.passwordConfirm) {
@@ -154,6 +154,11 @@ export default {
           this.snackbar = true;
         }
       }
+    }
+  },
+  computed: {
+    emailC: function() {
+      return this.email == null ? "" : this.email;
     }
   }
 };

@@ -16,7 +16,7 @@
               :single-line="true"
               solo
               type="email"
-              :clear-icon-cb="clearSearchA"
+              clearable
               required
             ></v-text-field>
             <v-text-field
@@ -33,14 +33,10 @@
               v-model="password"
             ></v-text-field>
 
-            <v-btn @click="logIn" block color="deep-purple darken-3" dark
-              >Log In</v-btn
-            >
+            <v-btn @click="logIn" block color="deep-purple darken-3" dark>Log In</v-btn>
             <v-snackbar v-model="snackbar" :timeout="2000">
               {{ text }}
-              <v-btn color="pink" text @click="snackbar = false">
-                Close
-              </v-btn>
+              <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
             </v-snackbar>
           </v-col>
         </v-row>
@@ -89,6 +85,7 @@ export default {
             this.password.trim().toLowerCase()
           )
           .then(user => {
+            this.$store.commit("changeFs", user);
             db.collection("geusers")
               .doc(user.user.uid)
               .get()
