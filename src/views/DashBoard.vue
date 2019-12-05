@@ -13,7 +13,7 @@
               <v-row>
                 <v-col cols="6" offset="2">
                   <h4>Temperatura</h4>
-                  <span>{{ parseFloat(temperature.temp).toFixed(2) }}</span>
+                  <span>{{ temperatures[temperatures.length-1]['temp'] }}%</span>
                 </v-col>
                 <v-col cols="3">
                   <v-icon class="yellow--text" size="50">mdi-baby-face-outline</v-icon>
@@ -24,7 +24,7 @@
               <v-row>
                 <v-col cols="6" offset="2">
                   <h4>Humedad</h4>
-                  <span>11%</span>
+                  <span>{{ humiditys[humiditys.length-1]['hum'] }}%</span>
                 </v-col>
                 <v-col cols="3">
                   <v-icon class="green--text" size="50">mdi-baby-face-outline</v-icon>
@@ -35,7 +35,7 @@
               <v-row>
                 <v-col cols="6" offset="2">
                   <h4>Vibracion</h4>
-                  <span>04-12-19 22:10:52</span>
+                  <span>{{ vibrations[vibrations.length-1]['date'] }}</span>
                 </v-col>
                 <v-col cols="3">
                   <v-icon class="green--text" size="50">mdi-baby-face-outline</v-icon>
@@ -50,8 +50,9 @@
 </template>
 
 <script>
-import "firebase/firestore";
-import db from "../firebaseInit";
+import * as firebase from "firebase/app";
+import "firebase/database";
+// import db from "../firebaseInit";
 
 export default {
   name: "dashboard",
@@ -60,22 +61,34 @@ export default {
       temperature: null,
       temperatures: [],
       humidity: null,
-      vibration: null
+      humiditys: [],
+      vibration: null,
+      vibrations: []
     };
   },
   methods: {
     getTemperature: function() {
-      db.collection("temperatures")
-        .orderBy("temp", "desc")
-        .get()
-        .then(snapshot => {
-          snapshot.forEach(doc => {
-            this.temperatures.push(doc.data());
-          });
-        })
-        .then(() => {
-          this.temperature = this.temperatures[0];
+      const dataBase = firebase.database();
+      const temp = dataBase.ref("temperatures");
+      temp.once("value", snapshot => {
+        snapshot.forEach(childSnapshot => {
+          this.temperatures.push(childSnapshot.val());
         });
+      });
+
+      const temp2 = dataBase.ref("humidity");
+      temp2.once("value", snapshot => {
+        snapshot.forEach(childSnapshot => {
+          this.humiditys.push(childSnapshot.val());
+        });
+      });
+
+      const temp3 = dataBase.ref("vibration");
+      temp3.once("value", snapshot => {
+        snapshot.forEach(childSnapshot => {
+          this.vibrations.push(childSnapshot.val());
+        });
+      });
     },
     getTemperatureAverga: function() {
       /* eslint-disable no-unused-vars */
