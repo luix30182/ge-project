@@ -4,7 +4,7 @@
       <v-container>
         <v-row>
           <v-col>
-            <h1 class="purple--text">Log In</h1>
+            <h1 class="purple--text">Inicia Sesión</h1>
           </v-col>
         </v-row>
         <v-row>
@@ -33,7 +33,9 @@
               v-model="password"
             ></v-text-field>
 
-            <v-btn @click="logIn" block color="deep-purple darken-3" dark>Log In</v-btn>
+            <v-btn @click="logIn" block color="deep-purple darken-3" dark
+              >Log In</v-btn
+            >
             <v-snackbar v-model="snackbar" :timeout="2000">
               {{ text }}
               <v-btn color="pink" text @click="snackbar = false">Close</v-btn>
@@ -109,16 +111,16 @@ export default {
               })
               .catch(() => {
                 this.$refs.form.reset();
-                this.text = "Error getting your data";
+                this.text = "Error al obtener tus datos";
                 this.snackbar = true;
               });
           })
           .catch(() => {
-            this.text = "Error in login";
+            this.text = "Error al iniciar sesión";
             this.snackbar = true;
           });
       } else {
-        this.text = "Verify your data";
+        this.text = "Verifica tus datos";
         this.snackbar = true;
       }
     }

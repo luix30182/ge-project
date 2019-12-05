@@ -17,3 +17,43 @@
     </v-container>
   </v-app>
 </template>
+
+
+<script>
+// import "firebase/firestore";
+// import db from "../firebaseInit";
+
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    // uploadData: function() {
+    //   fetch(
+    //     "https://gist.githubusercontent.com/luix30182/039b1097a429cad50158027670aaf1ee/raw/e8fb66666fd6ac76f8a83405ff84a1ad836a24fb/temperatures.json"
+    //   )
+    //     .then(response => response.json())
+    //     .then(json => {
+    // // const onj = JSON.parse(json);
+    //       for (let x in json) {
+    //         if (x > 50) {
+    //           db.collection("temperatures")
+    //             .doc()
+    //             .set({
+    //               date: json[x].date,
+    //               temp: json[x].temp
+    //             })
+    //             .then(() => {
+    //               console.log("success");
+    //             })
+    //             .catch(err => {
+    //               console.log(err);
+    //             });
+    //         }
+    //       }
+    //     });
+    // }
+  },
+  mounted() {}
+};
+</script>

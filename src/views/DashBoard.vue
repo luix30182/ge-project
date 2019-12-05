@@ -13,7 +13,7 @@
               <v-row>
                 <v-col cols="6" offset="2">
                   <h4>Temperatura</h4>
-                  <span>34°</span>
+                  <span>{{ parseFloat(temperature.temp).toFixed(2) }}</span>
                 </v-col>
                 <v-col cols="3">
                   <v-icon class="yellow--text" size="50">mdi-baby-face-outline</v-icon>
@@ -24,7 +24,7 @@
               <v-row>
                 <v-col cols="6" offset="2">
                   <h4>Humedad</h4>
-                  <span>34°</span>
+                  <span>11%</span>
                 </v-col>
                 <v-col cols="3">
                   <v-icon class="green--text" size="50">mdi-baby-face-outline</v-icon>
@@ -35,10 +35,10 @@
               <v-row>
                 <v-col cols="6" offset="2">
                   <h4>Vibracion</h4>
-                  <span>34°</span>
+                  <span>04-12-19 22:10:52</span>
                 </v-col>
                 <v-col cols="3">
-                  <v-icon class="red--text" size="50">mdi-baby-face-outline</v-icon>
+                  <v-icon class="green--text" size="50">mdi-baby-face-outline</v-icon>
                 </v-col>
               </v-row>
             </v-col>
@@ -50,20 +50,49 @@
 </template>
 
 <script>
+import "firebase/firestore";
+import db from "../firebaseInit";
+
 export default {
   name: "dashboard",
   data() {
     return {
       temperature: null,
+      temperatures: [],
       humidity: null,
       vibration: null
     };
+  },
+  methods: {
+    getTemperature: function() {
+      db.collection("temperatures")
+        .orderBy("temp", "desc")
+        .get()
+        .then(snapshot => {
+          snapshot.forEach(doc => {
+            this.temperatures.push(doc.data());
+          });
+        })
+        .then(() => {
+          this.temperature = this.temperatures[0];
+        });
+    },
+    getTemperatureAverga: function() {
+      /* eslint-disable no-unused-vars */
+      const av = this.temperatures.reduce((a, b) => {
+        a + b.temp;
+      });
+      //console.log(av);
+    }
   },
   beforeMount() {
     if (this.$store.getters.user === null) {
       this.$router.push({
         name: "home"
       });
+    } else {
+      this.getTemperature();
+      //this.getTemperatureAverga();
     }
   }
 };
